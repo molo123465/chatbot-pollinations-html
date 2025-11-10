@@ -5,7 +5,7 @@
   <title>IZI-CHAT AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:18px; }
     .container { width: 100%; max-width: 820px; background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.14); display: flex; flex-direction: column; height: 88vh; max-height: 680px; overflow: hidden; }
     .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 20px 16px 13px 16px; text-align: center; border-radius: 16px 16px 0 0; box-shadow: 0 2px 10px rgba(0,0,0,0.09); position: relative; min-height: 118px; }
@@ -15,24 +15,25 @@
     .messages { flex: 1; padding: 22px 22px 0 22px; overflow-y: auto; background: #f3f5fa; scroll-behavior: smooth; }
     .messages::-webkit-scrollbar { width: 7px; }
     .messages::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
-    .message { margin-bottom: 16px; display: flex; animation: fadeIn 0.25s ease-in; }
-    @keyframes fadeIn { from { opacity:0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);}}
+    .message { margin-bottom: 16px; display: flex; animation: fadeIn 0.22s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px);} to { opacity: 1; transform: translateY(0);}}
     .message.user { justify-content: flex-end; }
     .message.bot { justify-content: flex-start; }
     .message-content { max-width: 72%; padding: 12px 15px; border-radius: 18px; word-wrap: break-word; line-height: 1.54; font-size: 15px; }
-    .message.user .message-content { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border-bottom-right-radius: 7px; }
-    .message.bot .message-content { background:#fff; color:#2d3748; border-bottom-left-radius: 7px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    .message.user .message-content { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-bottom-right-radius: 8px; }
+    .message.bot .message-content { background:#fff; color:#2d3748; border-bottom-left-radius: 8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
     .message.bot.loading .message-content { background: #e2e8f0; color: #718096; font-style: italic; }
     .input-area { padding: 18px 22px; background: #fff; border-top: 1px solid #e6e6f2; }
     .input-form { display:flex; gap:10px; }
     .input-form input { flex:1; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 24px; font-size: 15px; outline: none; background:#fafbfc; transition: border-color 0.23s; }
     .input-form input:focus { border-color: #764ba2; box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.07);}
-    .input-form button { padding: 12px 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border:none; border-radius:24px; font-size: 15px; font-weight:600; cursor:pointer; box-shadow:0 4px 12px rgba(102,126,234,0.14); transition: all 0.21s; }
+    .input-form button { padding: 12px 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border:none; border-radius:24px; font-size: 15px; font-weight:600; cursor:pointer; box-shadow:0 4px 12px rgba(102,126,234,0.14); transition: all 0.2s; }
     .input-form button:hover:not(:disabled){ transform: translateY(-2px); box-shadow:0 6px 16px rgba(118, 75, 162, 0.14);}
     .input-form button:disabled { opacity: 0.65; cursor:not-allowed; }
     .welcome { text-align:center; color:#718096; padding:32px 13px 32px 13px; }
     .welcome h2 { font-size:21px; margin-bottom:10px; color:#512da8; }
     .welcome p { font-size:13px; }
+    .autoerror { color:#e74c3c; display:block; font-size:14px; margin:-7px 0 7px 0;text-align:center;}
     @media (max-width:600px){ .container{height:100vh;max-height:none;border-radius:0;} .header{border-radius:0; padding:13px 6px 11px 6px; min-height:90px;} .messages{padding:10px 4px 0 4px;} .input-area{padding:10px 4px;} .message-content{max-width:95%;} }
   </style>
 </head>
@@ -50,10 +51,11 @@
       </div>
     </div>
     <div class="input-area">
-      <form class="input-form" id="chatForm" autocomplete="off">
+      <form class="input-form" id="chatForm" autocomplete="off" onsubmit="return false;">
         <input type="text" id="userInput" placeholder="Escribe tu pregunta aquí..." autocomplete="off" required>
         <button type="submit" id="sendBtn">Enviar</button>
       </form>
+      <span id="autoerror" class="autoerror"></span>
     </div>
   </div>
 <script>
@@ -61,15 +63,15 @@ const form = document.getElementById('chatForm');
 const input = document.getElementById('userInput');
 const messagesDiv = document.getElementById('messages');
 const sendBtn = document.getElementById('sendBtn');
-let isProcessing = false;
-let firstMessage = true;
-let conversation = [];
+const errorDiv = document.getElementById('autoerror');
+let isProcessing = false, firstMessage = true, conversation = [];
 
 const CREATOR_ANSWERS = [
   'El creador de este chatbot es Ishak Ezzahouani.',
   'Este chat fue creado por Ishak Ezzahouani.',
   'Lo ha hecho Ishak Ezzahouani, ¡su creador!'
 ];
+
 function detectCreatorQuestion(q) {
   const text = q.toLowerCase();
   return (
@@ -111,34 +113,41 @@ function removeLoadingMessage(){
   const loading = document.getElementById('loading-msg');
   if(loading) loading.remove();
 }
-function saveConversation(){
-  localStorage.setItem('izi_conversation', JSON.stringify(conversation));
+function safeSaveConversation(){
+  try{ localStorage.setItem('izi_conversation', JSON.stringify(conversation)); return true; }
+  catch(err){ errorDiv.textContent = 'Error guardando historial 💾: '+err.message; setTimeout(()=>errorDiv.textContent='',6000); return false; }
 }
-function loadConversation(){
-  const c = localStorage.getItem('izi_conversation');
-  if(c){
-    try {
-      conversation = JSON.parse(c);
-      conversation.forEach(m => addMessage(m.text, m.sender));
-      firstMessage = false;
-    }catch{ conversation = []; }
+function safeLoadConversation(){
+  try{
+    const c = localStorage.getItem('izi_conversation');
+    if(c){
+      conversation=JSON.parse(c);conversation.forEach(m=>addMessage(m.text,m.sender));
+      firstMessage=false;
+    }
+  }catch(err){
+    conversation=[]; errorDiv.textContent='No se pudo recuperar histórico: '+err.message;
+    setTimeout(()=>errorDiv.textContent='',6000);
   }
 }
-loadConversation();
+window.addEventListener('storage',function(e){
+  if(e.key==='izi_conversation'){ messagesDiv.innerHTML=''; firstMessage=true; safeLoadConversation(); }
+});
+safeLoadConversation();
+
 async function sendMessage(userText){
   if(isProcessing||!userText.trim())return;
   isProcessing=true;
   sendBtn.disabled=true;
   sendBtn.textContent='Enviando...';
   addMessage(userText,'user');
-  conversation.push({text:userText,sender:'user'}); saveConversation();
+  conversation.push({text:userText,sender:'user'}); safeSaveConversation();
   addLoadingMessage();
   if(detectCreatorQuestion(userText)){
     setTimeout(()=>{
       removeLoadingMessage();
       const reply = CREATOR_ANSWERS[Math.floor(Math.random()*CREATOR_ANSWERS.length)];
       addMessage(reply,'bot');
-      conversation.push({text:reply,sender:'bot'}); saveConversation();
+      conversation.push({text:reply,sender:'bot'}); safeSaveConversation();
       isProcessing=false;
       sendBtn.disabled=false;
       sendBtn.textContent='Enviar';
@@ -146,15 +155,12 @@ async function sendMessage(userText){
     return;
   }
   try{
-    // Si hay historial, se envía como contexto al modelo
     let fullPrompt = '';
-    const MAX_PREV=7;
+    const MAX_PREV=10;
     if(conversation.length>1){
       const lastMsgs = conversation.slice(-MAX_PREV).map(m=>m.sender==='user'?'Usuario: '+m.text:'IZI-CHAT: '+m.text).join('\n');
       fullPrompt = lastMsgs+'\nUsuario: '+userText+'\nIZI-CHAT:';
-    }else{
-      fullPrompt=userText;
-    }
+    }else{ fullPrompt=userText; }
     const endpoint = 'https://text.pollinations.ai/'+encodeURIComponent(fullPrompt);
     const response = await fetch(endpoint,{method:'GET',headers:{'Accept':'text/plain'}});
     if(!response.ok){throw new Error('Error '+response.status);}
@@ -162,30 +168,32 @@ async function sendMessage(userText){
     removeLoadingMessage();
     if(answer && answer.trim()){
       addMessage(answer.trim(),'bot');
-      conversation.push({text:answer.trim(),sender:'bot'}); saveConversation();
+      conversation.push({text:answer.trim(),sender:'bot'}); safeSaveConversation();
     }else{
       addMessage('No pude generar una respuesta. Inténtalo de nuevo.','bot');
-      conversation.push({text:'No pude generar una respuesta. Inténtalo de nuevo.','bot'}); saveConversation();
+      errorDiv.textContent = 'No pude generar respuesta. Inténtalo otra vez.';
+      setTimeout(()=>errorDiv.textContent='',6000);
     }
   }catch(error){
     removeLoadingMessage();
     addMessage('Lo siento, hubo un error al procesar tu pregunta. Vuelve a intentarlo.','bot');
-    conversation.push({text:'Lo siento, hubo un error al procesar tu pregunta. Vuelve a intentarlo.','bot'}); saveConversation();
+    errorDiv.textContent='Error de red o API: '+error.message;
+    setTimeout(()=>errorDiv.textContent='',6000);
   }finally{
     isProcessing=false;
     sendBtn.disabled=false;
     sendBtn.textContent='Enviar';
+    safeSaveConversation();
   }
 }
-form.addEventListener('submit',e=>{
+form.addEventListener('submit',function(e){
   e.preventDefault();
   const userText = input.value.trim();
-  if(userText){
-    sendMessage(userText);
-    input.value='';
-  }
+  if(userText){ sendMessage(userText); input.value=''; }
+  return false;
 });
 window.addEventListener('load',()=>{input.focus();});
+input.addEventListener('input',()=>{ errorDiv.textContent='';});
 </script>
 </body>
 </html>
