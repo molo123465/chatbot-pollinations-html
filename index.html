@@ -23,18 +23,22 @@
     .message.user .message-content { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-bottom-right-radius: 8px; }
     .message.bot .message-content { background:#fff; color:#2d3748; border-bottom-left-radius: 8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
     .message.bot.loading .message-content { background: #e2e8f0; color: #718096; font-style: italic; }
-    .input-area { padding: 18px 22px; background: #fff; border-top: 1px solid #e6e6f2; }
+    .input-area { padding: 18px 22px; background: #fff; border-top: 1px solid #e6e6f2; display: flex; }
+    .input-block { flex:1; }
     .input-form { display:flex; gap:10px; }
     .input-form input { flex:1; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 24px; font-size: 15px; outline: none; background:#fafbfc; transition: border-color 0.23s; }
     .input-form input:focus { border-color: #764ba2; box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.07);}
     .input-form button { padding: 12px 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border:none; border-radius:24px; font-size: 15px; font-weight:600; cursor:pointer; box-shadow:0 4px 12px rgba(102,126,234,0.14); transition: all 0.2s; }
     .input-form button:hover:not(:disabled){ transform: translateY(-2px); box-shadow:0 6px 16px rgba(118, 75, 162, 0.14);}
     .input-form button:disabled { opacity: 0.65; cursor:not-allowed; }
+    .reset-btn { margin-left: 18px; background: #fff; color:#764ba2; border:2px solid #764ba2; border-radius:24px; font-size:15px; padding:12px 24px; cursor:pointer; transition:all 0.20s; font-weight:600; }
+    .reset-btn:hover { background: #764ba2; color: #fff; }
     .welcome { text-align:center; color:#718096; padding:32px 13px 32px 13px; }
     .welcome h2 { font-size:21px; margin-bottom:10px; color:#512da8; }
     .welcome p { font-size:13px; }
     .autoerror { color:#e74c3c; display:block; font-size:14px; margin:-7px 0 7px 0;text-align:center;}
-    @media (max-width:600px){ .container{height:100vh;max-height:none;border-radius:0;} .header{border-radius:0; padding:13px 6px 11px 6px; min-height:90px;} .messages{padding:10px 4px 0 4px;} .input-area{padding:10px 4px;} .message-content{max-width:95%;} }
+    @media (max-width:600px){ .container{height:100vh;max-height:none;border-radius:0;} .header{border-radius:0; padding:13px 6px 11px 6px; min-height:90px;} .messages{padding:10px 4px 0 4px;} .input-area{padding:10px 4px;display:block;} .input-block {margin-bottom:10px;} .message-content{max-width:95%;} }
+    .chart-img { display: block; margin: 26px auto 16px auto; max-width: 80%; max-height:260px; border-radius:12px; box-shadow:0 2px 12px rgba(118,75,162,0.12); }
   </style>
 </head>
 <body>
@@ -47,15 +51,18 @@
     <div class="messages" id="messages">
       <div class="welcome">
         <h2>¡Hola! 👋</h2>
-        <p>Bienvenido a <b>IZI-CHAT</b>.<br>Tu pregunta puede ser tan corta o larga como quieras.<br>¿Sabías que el creador es Ishak Ezzahouani?</p>
+        <p>Bienvenido a <b>IZI-CHAT</b>.<br>¿Sabías que el creador es Ishak Ezzahouani?</p>
       </div>
     </div>
     <div class="input-area">
-      <form class="input-form" id="chatForm" autocomplete="off" onsubmit="return false;">
-        <input type="text" id="userInput" placeholder="Escribe tu pregunta aquí..." autocomplete="off" required>
-        <button type="submit" id="sendBtn">Enviar</button>
-      </form>
-      <span id="autoerror" class="autoerror"></span>
+      <div class="input-block">
+        <form class="input-form" id="chatForm" autocomplete="off" onsubmit="return false;">
+          <input type="text" id="userInput" placeholder="Escribe tu pregunta aquí..." autocomplete="off" required>
+          <button type="submit" id="sendBtn">Enviar</button>
+        </form>
+        <span id="autoerror" class="autoerror"></span>
+      </div>
+      <button class="reset-btn" id="resetBtn" title="Resetear conversación">🔄 Reset chat</button>
     </div>
   </div>
 <script>
@@ -63,6 +70,7 @@ const form = document.getElementById('chatForm');
 const input = document.getElementById('userInput');
 const messagesDiv = document.getElementById('messages');
 const sendBtn = document.getElementById('sendBtn');
+const resetBtn = document.getElementById('resetBtn');
 const errorDiv = document.getElementById('autoerror');
 let isProcessing = false, firstMessage = true, conversation = [];
 
@@ -87,7 +95,12 @@ function detectCreatorQuestion(q) {
     text.includes('quién lo hizo')
   );
 }
-function addMessage(text, sender) {
+function detectChartRequest(q) {
+  // Detecta si el usuario pide un gráfico (palabras clave)
+  const t = q.toLowerCase();
+  return t.includes('gráfico') || t.includes('grafico') || t.includes('crea una gráfica') || t.includes('hazme una gráfica') || t.includes('chart');
+}
+function addMessage(text, sender, imageUrl=null) {
   if(firstMessage && sender==='user'){
     const welcome = messagesDiv.querySelector('.welcome');
     if(welcome) welcome.remove();
@@ -99,6 +112,12 @@ function addMessage(text, sender) {
   contDiv.className = 'message-content';
   contDiv.textContent = text;
   msgDiv.appendChild(contDiv);
+  if(imageUrl){
+    const chartImg = document.createElement('img');
+    chartImg.src = imageUrl;
+    chartImg.className = 'chart-img';
+    msgDiv.appendChild(chartImg);
+  }
   messagesDiv.appendChild(msgDiv);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
   return msgDiv;
@@ -140,6 +159,15 @@ window.addEventListener('storage',function(e){
 });
 safeLoadConversation();
 
+resetBtn.addEventListener('click',()=>{
+  localStorage.removeItem('izi_conversation');
+  messagesDiv.innerHTML = '<div class="welcome"><h2>¡Hola! 👋</h2><p>Bienvenido a <b>IZI-CHAT</b>.<br>¿Sabías que el creador es Ishak Ezzahouani?</p></div>';
+  conversation=[];
+  firstMessage=true;
+  errorDiv.textContent='Historial borrado. Conversación reiniciada.';
+  setTimeout(()=>errorDiv.textContent='',3500);
+});
+
 async function sendMessage(userText){
   if(isProcessing||!userText.trim())return;
   isProcessing=true;
@@ -157,7 +185,21 @@ async function sendMessage(userText){
       isProcessing=false;
       sendBtn.disabled=false;
       sendBtn.textContent='Enviar';
-    },350); // respuesta instantánea, sin demoras
+    },350);
+    return;
+  }
+  if(detectChartRequest(userText)){
+    // usuario pide gráfico: solicita datos y genera gráfico de ejemplo
+    setTimeout(async ()=>{
+      removeLoadingMessage();
+      let chartLabel = 'Gráfico generado según tus datos';
+      let chartUrl = 'https://quickchart.io/chart?c={type:"bar",data:{labels:["A","B","C","D","E"],datasets:[{label:"Datos",data:[5,9,2,7,3]}]}}';
+      addMessage(chartLabel,'bot',chartUrl);
+      conversation.push({text:chartLabel,sender:'bot',chartUrl:chartUrl}); safeSaveConversation();
+      isProcessing=false;
+      sendBtn.disabled=false;
+      sendBtn.textContent='Enviar';
+    },700);
     return;
   }
   try{
