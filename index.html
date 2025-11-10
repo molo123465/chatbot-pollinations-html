@@ -69,7 +69,9 @@ let isProcessing = false, firstMessage = true, conversation = [];
 const CREATOR_ANSWERS = [
   'El creador de este chatbot es Ishak Ezzahouani.',
   'Este chat fue creado por Ishak Ezzahouani.',
-  'Lo ha hecho Ishak Ezzahouani, ¡su creador!'
+  'Lo ha creado Ishak Ezzahouani, su autor.',
+  'El responsable del bot es Ishak Ezzahouani.',
+  'Este chatbot, IZI-CHAT, tiene como creador a Ishak Ezzahouani.'
 ];
 
 function detectCreatorQuestion(q) {
@@ -78,7 +80,11 @@ function detectCreatorQuestion(q) {
     text.includes('quien es el creador') ||
     text.includes('quién es el creador') ||
     text.includes('autor') ||
-    text.includes('ishak')
+    text.includes('ishak') ||
+    text.includes('creador') ||
+    text.includes('responsable') ||
+    text.includes('quien lo hizo') ||
+    text.includes('quién lo hizo')
   );
 }
 function addMessage(text, sender) {
@@ -151,7 +157,7 @@ async function sendMessage(userText){
       isProcessing=false;
       sendBtn.disabled=false;
       sendBtn.textContent='Enviar';
-    },500);
+    },350); // respuesta instantánea, sin demoras
     return;
   }
   try{
@@ -159,8 +165,8 @@ async function sendMessage(userText){
     const MAX_PREV=10;
     if(conversation.length>1){
       const lastMsgs = conversation.slice(-MAX_PREV).map(m=>m.sender==='user'?'Usuario: '+m.text:'IZI-CHAT: '+m.text).join('\n');
-      fullPrompt = lastMsgs+'\nUsuario: '+userText+'\nIZI-CHAT:';
-    }else{ fullPrompt=userText; }
+      fullPrompt = 'Responde en español, breve, claro y amigable.'+'\n'+lastMsgs+'\nUsuario: '+userText+'\nIZI-CHAT:';
+    }else{ fullPrompt='Responde en español, breve, claro y amigable.'+'\n'+userText; }
     const endpoint = 'https://text.pollinations.ai/'+encodeURIComponent(fullPrompt);
     const response = await fetch(endpoint,{method:'GET',headers:{'Accept':'text/plain'}});
     if(!response.ok){throw new Error('Error '+response.status);}
