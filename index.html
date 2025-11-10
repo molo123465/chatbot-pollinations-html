@@ -2,91 +2,304 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Chatbot Pollinations.AI estilo ChatGPT</title>
+  <title>Chatbot AI - Pollinations</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0; font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f5f6fa;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    .chatbox {
-      max-width: 400px; margin: 32px auto; background: #fff; border-radius: 8px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.1); overflow: hidden;
-      display: flex; flex-direction: column; height: 600px;
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      max-height: 700px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin: 5px 0 0 0;
     }
     .messages {
-      flex: 1; padding: 16px; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 12px;
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      scroll-behavior: smooth;
+    }
+    .messages::-webkit-scrollbar {
+      width: 8px;
+    }
+    .messages::-webkit-scrollbar-thumb {
+      background: #cbd5e0;
+      border-radius: 4px;
+    }
+    .message {
+      margin-bottom: 16px;
+      display: flex;
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .message.user {
-      align-self: flex-end; background: #d1e7ff; color: #0056b3; padding: 8px 14px;
-      border-radius: 14px 14px 0 14px; max-width: 70%;
+      justify-content: flex-end;
     }
     .message.bot {
-      align-self: flex-start; background: #ececec; color: #333; padding: 8px 14px;
-      border-radius: 14px 14px 14px 0; max-width: 70%;
+      justify-content: flex-start;
     }
-    .chat-input {
-      display: flex; padding: 12px; background: #fafbfc;
-      border-top: 1px solid #eee;
+    .message-content {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      word-wrap: break-word;
+      line-height: 1.5;
+      font-size: 15px;
     }
-    .chat-input input {
-      flex: 1; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; padding: 8px;
-      margin-right: 8px; outline: none;
+    .message.user .message-content {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border-bottom-right-radius: 4px;
     }
-    .chat-input button {
-      background: #007bff; color: #fff; border: none; border-radius: 6px;
-      padding: 8px 16px; font-size: 16px; cursor: pointer;
-      transition: background 0.2s;
+    .message.bot .message-content {
+      background: #fff;
+      color: #2d3748;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .chat-input button:hover {
-      background: #0056b3;
+    .message.bot.loading .message-content {
+      background: #e2e8f0;
+      color: #718096;
+      font-style: italic;
+    }
+    .input-area {
+      padding: 20px;
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+    }
+    .input-form {
+      display: flex;
+      gap: 10px;
+    }
+    .input-form input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 25px;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s;
+    }
+    .input-form input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .input-form button {
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    .input-form button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+    }
+    .input-form button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .welcome {
+      text-align: center;
+      color: #718096;
+      padding: 40px 20px;
+    }
+    .welcome h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #2d3748;
+    }
+    .welcome p {
+      font-size: 14px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
+      }
+      .header {
+        border-radius: 0;
+      }
+      .message-content {
+        max-width: 85%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="chatbox">
-    <div class="messages" id="chatMessages"></div>
-    <form class="chat-input" id="chatForm">
-      <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." autocomplete="off" required>
-      <button type="submit">Enviar</button>
-    </form>
+  <div class="container">
+    <div class="header">
+      <h1>🤖 Chatbot AI</h1>
+      <p>Pregunta cualquier cosa - Powered by Pollinations.AI</p>
+    </div>
+    <div class="messages" id="messages">
+      <div class="welcome">
+        <h2>¡Hola! 👋</h2>
+        <p>Soy tu asistente AI. Pregunta lo que quieras y te ayudaré con la mejor respuesta posible.</p>
+      </div>
+    </div>
+    <div class="input-area">
+      <form class="input-form" id="chatForm">
+        <input 
+          type="text" 
+          id="userInput" 
+          placeholder="Escribe tu pregunta aquí..."
+          autocomplete="off"
+          required
+        >
+        <button type="submit" id="sendBtn">Enviar</button>
+      </form>
+    </div>
   </div>
-  <script>
-    const chatForm = document.getElementById('chatForm');
-    const chatInput = document.getElementById('chatInput');
-    const chatMessages = document.getElementById('chatMessages');
 
-    function appendMessage(text, sender) {
-      const div = document.createElement('div');
-      div.classList.add('message', sender);
-      div.innerText = text;
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+  <script>
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('userInput');
+    const messages = document.getElementById('messages');
+    const sendBtn = document.getElementById('sendBtn');
+    let isProcessing = false;
+
+    // Remove welcome message on first interaction
+    let firstMessage = true;
+
+    function addMessage(text, sender) {
+      if (firstMessage && sender === 'user') {
+        const welcome = messages.querySelector('.welcome');
+        if (welcome) welcome.remove();
+        firstMessage = false;
+      }
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = text;
+      
+      messageDiv.appendChild(contentDiv);
+      messages.appendChild(messageDiv);
+      messages.scrollTop = messages.scrollHeight;
+      
+      return messageDiv;
     }
 
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const userText = chatInput.value.trim();
-      if (!userText) return;
-      appendMessage(userText, 'user');
-      chatInput.value = '';
-      appendMessage('...', 'bot');
+    function addLoadingMessage() {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message bot loading';
+      messageDiv.id = 'loading-msg';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = 'Pensando...';
+      
+      messageDiv.appendChild(contentDiv);
+      messages.appendChild(messageDiv);
+      messages.scrollTop = messages.scrollHeight;
+      
+      return messageDiv;
+    }
 
+    function removeLoadingMessage() {
+      const loading = document.getElementById('loading-msg');
+      if (loading) loading.remove();
+    }
+
+    async function sendMessage(userText) {
+      if (isProcessing || !userText.trim()) return;
+      
+      isProcessing = true;
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Enviando...';
+      
+      addMessage(userText, 'user');
+      const loadingMsg = addLoadingMessage();
+      
       try {
-        // URL encode prompt for spaces/special characters
         const endpoint = 'https://text.pollinations.ai/' + encodeURIComponent(userText);
-        const response = await fetch(endpoint, { method: 'GET' });
+        const response = await fetch(endpoint, {
+          method: 'GET',
+          headers: {
+            'Accept': 'text/plain'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
         const answer = await response.text();
-        // Delete previous "..." bot message
-        const lastBotMsg = chatMessages.querySelector('.message.bot:last-child');
-        if (lastBotMsg) lastBotMsg.remove();
-        appendMessage(answer, 'bot');
+        removeLoadingMessage();
+        
+        if (answer && answer.trim()) {
+          addMessage(answer.trim(), 'bot');
+        } else {
+          addMessage('No pude generar una respuesta. Inténtalo de nuevo.', 'bot');
+        }
       } catch (error) {
-        const lastBotMsg = chatMessages.querySelector('.message.bot:last-child');
-        if (lastBotMsg) lastBotMsg.remove();
-        appendMessage('Error: No se pudo obtener la respuesta.', 'bot');
+        console.error('Error:', error);
+        removeLoadingMessage();
+        addMessage('Lo siento, hubo un error al procesar tu pregunta. Por favor, inténtalo de nuevo.', 'bot');
+      } finally {
+        isProcessing = false;
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Enviar';
       }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const userText = input.value.trim();
+      if (userText) {
+        sendMessage(userText);
+        input.value = '';
+      }
+    });
+
+    // Focus input on load
+    window.addEventListener('load', () => {
+      input.focus();
     });
   </script>
 </body>
