@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Chatbot AI - Pollinations</title>
+  <title>IZI-CHAT AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,20 +30,29 @@
     .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #fff;
-      padding: 20px;
+      padding: 20px 20px 12px 20px;
       text-align: center;
       border-radius: 16px 16px 0 0;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: relative;
+      min-height: 110px;
+    }
+    .header img {
+      display: block;
+      margin: 0 auto 12px auto;
+      height: 64px;
+      width: 64px;
     }
     .header h1 {
-      font-size: 24px;
-      font-weight: 600;
-      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      letter-spacing: 2px;
     }
     .header p {
       font-size: 14px;
-      opacity: 0.9;
-      margin: 5px 0 0 0;
+      opacity: 0.95;
+      margin: 6px 0 0 0;
     }
     .messages {
       flex: 1;
@@ -171,13 +180,14 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🤖 Chatbot AI</h1>
-      <p>Pregunta cualquier cosa - Powered by Pollinations.AI</p>
+      <img src="https://user-gen-media-assets.s3.amazonaws.com/gemini_images/f8f46e9d-6531-4980-a377-72d89b9632df.png" alt="Logo IZI-CHAT">
+      <h1>IZI-CHAT</h1>
+      <p>El chatbot AI intuitivo y veloz</p>
     </div>
     <div class="messages" id="messages">
       <div class="welcome">
         <h2>¡Hola! 👋</h2>
-        <p>Soy tu asistente AI. Pregunta lo que quieras y te ayudaré con la mejor respuesta posible.</p>
+        <p>Te doy la bienvenida a <b>IZI-CHAT</b>.<br>Pregunta lo que quieras y nuestro bot con cerebro te responde al instante.</p>
       </div>
     </div>
     <div class="input-area">
@@ -200,8 +210,6 @@
     const messages = document.getElementById('messages');
     const sendBtn = document.getElementById('sendBtn');
     let isProcessing = false;
-
-    // Remove welcome message on first interaction
     let firstMessage = true;
 
     function addMessage(text, sender) {
@@ -210,18 +218,14 @@
         if (welcome) welcome.remove();
         firstMessage = false;
       }
-
       const messageDiv = document.createElement('div');
       messageDiv.className = `message ${sender}`;
-      
       const contentDiv = document.createElement('div');
       contentDiv.className = 'message-content';
       contentDiv.textContent = text;
-      
       messageDiv.appendChild(contentDiv);
       messages.appendChild(messageDiv);
       messages.scrollTop = messages.scrollHeight;
-      
       return messageDiv;
     }
 
@@ -229,15 +233,12 @@
       const messageDiv = document.createElement('div');
       messageDiv.className = 'message bot loading';
       messageDiv.id = 'loading-msg';
-      
       const contentDiv = document.createElement('div');
       contentDiv.className = 'message-content';
       contentDiv.textContent = 'Pensando...';
-      
       messageDiv.appendChild(contentDiv);
       messages.appendChild(messageDiv);
       messages.scrollTop = messages.scrollHeight;
-      
       return messageDiv;
     }
 
@@ -248,14 +249,11 @@
 
     async function sendMessage(userText) {
       if (isProcessing || !userText.trim()) return;
-      
       isProcessing = true;
       sendBtn.disabled = true;
       sendBtn.textContent = 'Enviando...';
-      
       addMessage(userText, 'user');
-      const loadingMsg = addLoadingMessage();
-      
+      addLoadingMessage();
       try {
         const endpoint = 'https://text.pollinations.ai/' + encodeURIComponent(userText);
         const response = await fetch(endpoint, {
@@ -264,14 +262,11 @@
             'Accept': 'text/plain'
           }
         });
-        
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-        
         const answer = await response.text();
         removeLoadingMessage();
-        
         if (answer && answer.trim()) {
           addMessage(answer.trim(), 'bot');
         } else {
@@ -287,7 +282,6 @@
         sendBtn.textContent = 'Enviar';
       }
     }
-
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const userText = input.value.trim();
@@ -296,8 +290,6 @@
         input.value = '';
       }
     });
-
-    // Focus input on load
     window.addEventListener('load', () => {
       input.focus();
     });
