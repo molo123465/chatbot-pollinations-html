@@ -22,32 +22,16 @@
       --border: #282848;
       background: #171827;
     }
-    body {
-      margin:0; min-height:100vh; background:var(--main-bg); color:var(--txt); font-family:'Segoe UI',Arial,sans-serif; transition:background .3s;color:var(--txt);overflow:hidden;
-    }
-    .container {
-      width:100vw; max-width:900px; height:98vh; margin:auto; display:flex; flex-direction:column; border-radius:15px; box-shadow:0 2px 26px rgba(0,0,32,.06);
-      background: var(--box-bg); position:relative; box-sizing: border-box;
-    }
-    .chat-header {
-      height:46px; display:flex; align-items:center; justify-content:center; padding:0; margin:0 5px 0 0; position:relative;
-      border-bottom:1px solid var(--border); background: var(--box-bg);
-    }
-    .chat-header h1 {
-      flex:1; text-align:center; font-size:21px; font-weight:800; margin:0; color:var(--primary); letter-spacing:1px;
-    }
-    .settings-btn {
-      position:absolute; right:12px; top:9px; font-size:22px; background:rgba(255,255,255,0.8);
-      border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; color:var(--primary); z-index:30; box-shadow:0 1px 7px rgba(76,75,130,0.08);
-      transition: background .2s;
-    }
+    body { margin:0; min-height:100vh; background:var(--main-bg); color:var(--txt); font-family:'Segoe UI',Arial,sans-serif; transition:background .3s; color:var(--txt); overflow:hidden; }
+    .container { width:100vw; max-width:900px; height:98vh; margin:auto; display:flex; flex-direction:column; border-radius:15px; box-shadow:0 2px 26px rgba(0,0,32,.06); background: var(--box-bg); position:relative; box-sizing: border-box; }
+    .chat-header { height:46px; display:flex; align-items:center; justify-content:center; padding:0; margin:0 5px 0 0; position:relative; border-bottom:1px solid var(--border); background: var(--box-bg); }
+    .chat-header h1 { flex:1; text-align:center; font-size:21px; font-weight:800; margin:0; color:var(--primary); letter-spacing:1px; }
+    .logo-izi { height:28px; width:28px; margin-right:5px; }
+    .settings-btn { position:absolute; right:55px; top:9px; font-size:22px; background:rgba(255,255,255,0.8); border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; color:var(--primary); z-index:30; box-shadow:0 1px 7px rgba(76,75,130,0.08); transition: background .2s; }
     .settings-btn:hover { background:var(--secondary); color:#fff; }
-    .settings-panel {
-      display:none; position:fixed; right:15px; top:64px; width:248px; background: var(--box-bg); border-radius:12px 0 12px 12px;
-      box-shadow:0 4px 30px rgba(80,40,160,.13); z-index:102;
-      padding:22px 18px 16px 18px; border:1px solid var(--border); font-size:15px;
-      transition: all .2s;
-    }
+    .reset-btn2 { position:absolute; right:12px; top:9px; font-size:16px; background:var(--primary); color:#fff; border:none; border-radius:8px; padding:8px 17px; font-weight:700; cursor:pointer; box-shadow:0 2px 8px rgba(118,75,162,0.04); transition:background .21s; }
+    .reset-btn2:hover { background:var(--secondary); }
+    .settings-panel { display:none; position:fixed; right:15px; top:64px; width:248px; background: var(--box-bg); border-radius:12px 0 12px 12px; box-shadow:0 4px 30px rgba(80,40,160,.13); z-index:102; padding:22px 18px 16px 18px; border:1px solid var(--border); font-size:15px; transition: all .2s; }
     .settings-panel.active{ display:block; }
     .settings-panel label{color:var(--primary);font-size:12.5px; font-weight:700;}
     .settings-panel input[type=text]{width:93%;margin-bottom:7px;padding:8px 9px;font-size:15px;border-radius:6px;border:1px solid var(--border);background:var(--main-bg);}
@@ -62,9 +46,10 @@
     .message.user { justify-content:flex-end;}
     .message.bot { justify-content:flex-start;}
     .message-content {max-width:70vw;padding:12px 15px; border-radius:18px; font-size:15px; background:var(--secondary); color:#fff; position:relative;}
-    .message.bot .message-content { background: var(--box-bg); color: var(--txt); border-bottom-left-radius: 8px; border:1px solid var(--border);}
-    .copy-btn {
-      position:absolute; right:7px; bottom:4px; background:none;border:none;color:var(--primary);font-size:14px;cursor:pointer;z-index:12;}
+    .message.bot .message-content { background: var(--box-bg); color: var(--txt); border-bottom-left-radius: 8px; border:1px solid var(--border); }
+    .copy-row { width:100%; text-align:right; margin-top:8px; }
+    .copy-btn { background:none;border:none;color:var(--primary);font-size:15px;cursor:pointer;z-index:12;padding-right:5px; }
+    .copy-btn:hover{color:var(--secondary);}
     .message.user .message-content{border-radius:16px 18px 6px 18px;background:linear-gradient(135deg,var(--secondary) 0%,var(--primary) 100%);}
     .message.bot.loading .message-content{background:var(--box-bg);color:#aaa;font-style:italic;border:1px dashed var(--primary);}
     .input-area {padding:20px 10px 12px 10px;background:var(--box-bg);border-top:1px solid var(--border);}
@@ -74,15 +59,16 @@
     .input-form button:disabled{opacity:0.65;cursor:not-allowed;}
     .autoerror {color:#e74c3c;display:block;font-size:14px;margin:-7px 0 7px 0;text-align:center;}
     .chart-img {display:block;margin:18px auto 10px auto;max-width:96%;max-height:235px;border-radius:13px;box-shadow:0 2px 10px rgba(118,75,162,0.10);cursor:pointer;}
-    @media (max-width:615px){ .container{max-width:100vw;height:99vh;} .chat-header{padding:0 2px;} .chat-header h1{font-size:16px;}.messages{padding:7.5px 2px 0 2px;}.input-area{padding:9px 2px 12px 2px;} .message-content{font-size:14px;min-width:48px;}.settings-panel{right:3vw;width:97vw;min-width:170px;} }
+    @media (max-width:615px){ .container{max-width:100vw;height:99vh;} .chat-header{padding:0 2px;} .chat-header h1{font-size:16px;}.logo-izi{height:15px;width:15px;} .messages{padding:7.5px 2px 0 2px;}.input-area{padding:9px 2px 12px 2px;} .message-content{font-size:14px;min-width:48px;}.settings-panel{right:3vw;width:97vw;min-width:170px;} }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="chat-header">
-      <img src="https://user-gen-media-assets.s3.amazonaws.com/gemini_images/f8f46e9d-6531-4980-a377-72d89b9632df.png" alt="IZI-CHAT logo">
+      <img src="https://user-gen-media-assets.s3.amazonaws.com/gemini_images/f8f46e9d-6531-4980-a377-72d89b9632df.png" alt="IZI-CHAT logo" class="logo-izi">
       <h1>IZI-CHAT</h1>
       <button class="settings-btn" id="settingsBtn" title="Ajustes">&#9881;</button>
+      <button class="reset-btn2" id="resetBtn">RESET</button>
     </div>
     <div class="settings-panel" id="settingsPanel">
       <button class="close-btn" id="closeSettings">&times;</button>
@@ -95,7 +81,6 @@
       <div class="mode-toggle">
         <button id="darkModeBtn">🌙 Oscuro</button>
         <button id="lightModeBtn" class="active">☀️ Claro</button>
-        <button class="reset-btn" id="resetBtn">RESET CHAT</button>
       </div>
     </div>
     <div class="messages" id="messages"></div>
@@ -121,7 +106,7 @@ function detectCreatorQuestion(q){const t=q.toLowerCase();return t.includes('qui
 function detectChartRequest(q){const t=q.toLowerCase();return (t.includes('grafico')||t.includes('gráfico')||t.includes('chart'))&&/\d/.test(q);}
 function parseChartFromText(text){let tipo='bar';if(/pie|tarta|pastel/i.test(text))tipo='pie';else if(/línea|linea|line/i.test(text))tipo='line';else if(/área|area/i.test(text))tipo='line';const tituloMatch=text.match(/título[:\s]+([^,\.]+)/i)||text.match(/titulado[:\s]+([^,\.]+)/i);const titulo=tituloMatch?tituloMatch[1].trim():'Gráfico';const dataMatches=text.matchAll(/([a-záéíóúñ\s]+)[=:](\d+(?:\.\d+)?)/gi);let labels=[],values=[];for(const m of dataMatches){labels.push(m[1].trim());values.push(parseFloat(m[2]));}if(labels.length===0){labels=['A','B','C','D','E'];values=[5,9,2,7,3];}return{tipo,titulo,labels,values}}
 function generateChartUrl(tipo,titulo,labels,values){const chartConfig={type:tipo,data:{labels:labels,datasets:[{label:titulo,data:values,backgroundColor:['#667eea','#764ba2','#48bb78','#ed8936','#f56565']}]},options:{title:{display:true,text:titulo}}};return'https://quickchart.io/chart?width=700&height=380&c='+encodeURIComponent(JSON.stringify(chartConfig));}
-function addMessage(text,sender,imageUrl=null){if(firstMessage&&sender==='user'){firstMessage=false;}const msgDiv=document.createElement('div');msgDiv.className=`message ${sender}`;const contDiv=document.createElement('div');contDiv.className='message-content';contDiv.textContent=text;if(sender==='bot'){const copyBtn=document.createElement('button');copyBtn.className='copy-btn';copyBtn.innerHTML='📋';copyBtn.title='Copiar respuesta';copyBtn.onclick=()=>{navigator.clipboard.writeText(text);copyBtn.textContent='¡Copiado!';setTimeout(()=>copyBtn.textContent='📋',900)};contDiv.appendChild(copyBtn)}msgDiv.appendChild(contDiv);if(imageUrl){const chartImg=document.createElement('img');chartImg.src=imageUrl;chartImg.className='chart-img';chartImg.title='Click para descargar';chartImg.onclick=()=>{window.open(imageUrl,'_blank')};msgDiv.appendChild(chartImg);}messagesDiv.appendChild(msgDiv);messagesDiv.scrollTop=messagesDiv.scrollHeight;return msgDiv;}
+function addMessage(text,sender,imageUrl=null){if(firstMessage&&sender==='user'){firstMessage=false;}const msgDiv=document.createElement('div');msgDiv.className=`message ${sender}`;const contDiv=document.createElement('div');contDiv.className='message-content';contDiv.textContent=text;msgDiv.appendChild(contDiv);if(imageUrl){const chartImg=document.createElement('img');chartImg.src=imageUrl;chartImg.className='chart-img';chartImg.title='Click para descargar';chartImg.onclick=()=>{window.open(imageUrl,'_blank')};msgDiv.appendChild(chartImg);}messagesDiv.appendChild(msgDiv);if(sender==='bot'){const copyRow=document.createElement('div');copyRow.className='copy-row';const copyBtn=document.createElement('button');copyBtn.className='copy-btn';copyBtn.innerHTML='📋 Copiar';copyBtn.title='Copiar respuesta';copyBtn.onclick=()=>{navigator.clipboard.writeText(text);copyBtn.textContent='¡Copiado!';setTimeout(()=>copyBtn.innerHTML='📋 Copiar',900)};copyRow.appendChild(copyBtn);msgDiv.appendChild(copyRow);}messagesDiv.scrollTop=messagesDiv.scrollHeight;return msgDiv;}
 function addLoadingMessage(){const msgDiv=document.createElement('div');msgDiv.className='message bot loading';msgDiv.id='loading-msg';const contDiv=document.createElement('div');contDiv.className='message-content';contDiv.textContent='Pensando...';msgDiv.appendChild(contDiv);messagesDiv.appendChild(msgDiv);messagesDiv.scrollTop=messagesDiv.scrollHeight;return msgDiv;}
 function removeLoadingMessage(){const loading=document.getElementById('loading-msg');if(loading)loading.remove();}
 function safeSaveConversation(){try{localStorage.setItem('izi_conversation',JSON.stringify(conversation));return true;}catch(err){errorDiv.textContent='Error guardando historial 💾: '+err.message;setTimeout(()=>errorDiv.textContent='',6000);return false;}}
