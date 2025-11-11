@@ -8,277 +8,132 @@
     :root {
       --main-bg: #f3f5fa;
       --box-bg: #fff;
-      --txt: #2d3748;
+      --txt: #222;
       --primary: #764ba2;
       --secondary: #667eea;
       --border: #e6e6f2;
     }
     body.dark {
-      --main-bg: #23243c;
-      --box-bg: #181827;
-      --txt: #eeeeee;
+      --main-bg: #222335;
+      --box-bg: #171827;
+      --txt: #eee;
       --primary: #48bb78;
       --secondary: #764ba2;
       --border: #282848;
-      background: #181827;
+      background: #171827;
     }
     body {
-      font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:18px; color: var(--txt); transition: background 0.4s;
+      margin:0; min-height:100vh; background:var(--main-bg); color:var(--txt); font-family:'Segoe UI',Arial,sans-serif; transition:background .3s;color:var(--txt);overflow:hidden;
     }
     .container {
-      width: 100%; max-width: 900px; background: var(--box-bg); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.10); display: flex; flex-direction: column; height: 93vh; max-height: 780px; overflow: hidden; transition: background 0.45s;
+      width:100vw; max-width:900px; height:98vh; margin:auto; display:flex; flex-direction:column; border-radius:15px; box-shadow:0 2px 26px rgba(0,0,32,.06);
+      background: var(--box-bg); position:relative; box-sizing: border-box;
     }
-    .header {
-      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: #fff; padding: 18px 16px 12px 16px; text-align: center; border-radius: 16px 16px 0 0; box-shadow: 0 2px 10px rgba(0,0,0,0.09); position: relative; }
-    .header img { display: block; margin: 0 auto 10px auto; height: 56px; width: 56px; }
-    .header h1 { font-size: 28px; font-weight: 800; margin: 0 0 3px 0; letter-spacing: 2px; }
-    .header p { font-size: 13px; margin: 5px 0 0 0; }
-    .controls { padding: 12px 20px 8px 20px; background: var(--main-bg); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .adjust { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
-    .adjust label { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom:2px; }
-    .adjust input[type=text] { padding: 7px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 15px; background: var(--box-bg); color: var(--txt); margin-bottom:3px; width:280px; }
-    .adjust button { padding: 10px 26px; margin-top:7px; background: var(--primary); color: #fff; border: none; border-radius: 9px; font-size: 16px; cursor: pointer; font-weight: 700; }
-    .adjust button:hover { background: var(--secondary); }
-    .mode-toggle { display:flex; gap:18px; align-items:center; }
-    .mode-toggle button { background: var(--secondary); color:#fff; border:none; font-size:18px; padding:11px 25px; border-radius:12px; cursor:pointer; font-weight:700; letter-spacing:1px; }
-    .mode-toggle button.active { background: var(--primary); }
-    .reset-btn { font-size:20px; font-weight:800; padding:12px 48px; border-radius:12px; background: var(--primary); color:#fff; border:none; margin-left:13px; cursor:pointer; transition: background 0.25s; box-shadow:0 2px 4px rgba(118,75,162,0.09);}
-    .reset-btn:hover { background: var(--secondary); }
-    .messages { flex: 1; padding: 22px 22px 0 22px; overflow-y: auto; background: var(--main-bg); scroll-behavior: smooth; }
-    .messages::-webkit-scrollbar { width: 7px; }
-    .messages::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
-    .message { margin-bottom: 16px; display: flex; animation: fadeIn 0.17s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);}}
-    .message.user { justify-content: flex-end; }
-    .message.bot { justify-content: flex-start; }
-    .message-content { max-width: 71%; padding: 13px 17px; border-radius: 19px; word-wrap: break-word; line-height: 1.56; font-size: 15px; background: var(--secondary); color: #fff; }
-    .message.bot .message-content { background: var(--box-bg); color: var(--txt); border-bottom-left-radius: 8px; box-shadow:0 2px 9px rgba(0,0,0,0.06); }
-    .message.bot.loading .message-content { background: var(--box-bg); color: #aaa; font-style: italic; }
-    .input-area { padding: 13px 22px 13px 22px; background: var(--box-bg); border-top: 1px solid var(--border); display: flex; }
-    .input-block { flex:1; }
-    .input-form { display:flex; gap:10px; }
-    .input-form input { flex:1; padding: 12px 16px; border: 2px solid var(--border); border-radius: 24px; font-size: 15px; outline: none; background:var(--main-bg); color: var(--txt); transition: border-color 0.23s; }
-    .input-form input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);}
-    .input-form button { padding: 12px 28px; background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); color: #fff; border:none; border-radius:24px; font-size: 17px; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(102,126,234,0.10); transition: all 0.2s; }
-    .input-form button:hover:not(:disabled){ background: var(--primary); }
-    .input-form button:disabled { opacity: 0.65; cursor:not-allowed; }
-    .welcome { text-align:center; color:var(--primary); padding:32px 13px 32px 13px; background: var(--main-bg); border-radius:20px; margin-bottom:8px; }
-    .welcome h2 { font-size:23px; margin-bottom:10px; color:var(--secondary); }
-    .welcome p { font-size:15px; }
-    .autoerror { color:#e74c3c; display:block; font-size:15px; margin:-7px 0 7px 0;text-align:center;}
-    @media (max-width:600px){ .container{height:100vh;max-height:none;border-radius:0;} .header{border-radius:0; padding:13px 6px 10px 6px;} .controls{padding:6px 6px; font-size:13px;} .adjust input[type=text]{width:97%;margin-top:2px;} .messages{padding:10px 4px 0 4px;} .input-area{padding:10px 4px;display:block;} .input-block {margin-bottom:10px;} .message-content{max-width:97%;font-size:15px;} }
-    .chart-img { display: block; margin: 22px auto 15px auto; max-width: 96%; max-height:260px; border-radius:13px; box-shadow:0 2px 12px rgba(118,75,162,0.10); cursor: pointer; }
+    .chat-header {
+      height:46px; display:flex; align-items:center; justify-content:center; padding:0; margin:0 5px 0 0; position:relative;
+      border-bottom:1px solid var(--border); background: var(--box-bg);
+    }
+    .chat-header h1 {
+      flex:1; text-align:center; font-size:21px; font-weight:800; margin:0; color:var(--primary); letter-spacing:1px;
+    }
+    .settings-btn {
+      position:absolute; right:12px; top:9px; font-size:22px; background:rgba(255,255,255,0.8);
+      border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; color:var(--primary); z-index:30; box-shadow:0 1px 7px rgba(76,75,130,0.08);
+      transition: background .2s;
+    }
+    .settings-btn:hover { background:var(--secondary); color:#fff; }
+    .settings-panel {
+      display:none; position:fixed; right:15px; top:64px; width:248px; background: var(--box-bg); border-radius:12px 0 12px 12px;
+      box-shadow:0 4px 30px rgba(80,40,160,.13); z-index:102;
+      padding:22px 18px 16px 18px; border:1px solid var(--border); font-size:15px;
+      transition: all .2s;
+    }
+    .settings-panel.active{ display:block; }
+    .settings-panel label{color:var(--primary);font-size:12.5px; font-weight:700;}
+    .settings-panel input[type=text]{width:93%;margin-bottom:7px;padding:8px 9px;font-size:15px;border-radius:6px;border:1px solid var(--border);background:var(--main-bg);}
+    .settings-panel button{margin-top:6px;padding:8px 16px;background:var(--primary);color:#fff;border:none;border-radius:7px;font-weight:700;cursor:pointer;}
+    .settings-panel button:hover{background:var(--secondary);}
+    .mode-toggle{margin-top:10px;}
+    .mode-toggle button{background:var(--secondary);color:#fff;border:none;font-size:14px;padding:8px 15px;border-radius:7px;cursor:pointer;font-weight:600;}
+    .mode-toggle button.active{background:var(--primary);}
+    .settings-panel .close-btn{position:absolute;top:7px;right:13px;background:none;color:var(--primary);font-size:19px;border:none;cursor:pointer;}
+    .messages { flex:1; overflow-y:auto; padding:19px 14px 2px 14px; background:var(--main-bg);}
+    .message { margin-bottom:14px; display:flex; }
+    .message.user { justify-content:flex-end;}
+    .message.bot { justify-content:flex-start;}
+    .message-content {max-width:70vw;padding:12px 15px; border-radius:18px; font-size:15px; background:var(--secondary); color:#fff; position:relative;}
+    .message.bot .message-content { background: var(--box-bg); color: var(--txt); border-bottom-left-radius: 8px; border:1px solid var(--border);}
+    .copy-btn {
+      position:absolute; right:7px; bottom:4px; background:none;border:none;color:var(--primary);font-size:14px;cursor:pointer;z-index:12;}
+    .message.user .message-content{border-radius:16px 18px 6px 18px;background:linear-gradient(135deg,var(--secondary) 0%,var(--primary) 100%);}
+    .message.bot.loading .message-content{background:var(--box-bg);color:#aaa;font-style:italic;border:1px dashed var(--primary);}
+    .input-area {padding:20px 10px 12px 10px;background:var(--box-bg);border-top:1px solid var(--border);}
+    .input-form {display:flex;gap:10px;}
+    .input-form input{flex:1;padding:13px 18px;border:2px solid var(--border);border-radius:22px;font-size:15px;outline:none;background:var(--main-bg);color:var(--txt);}
+    .input-form button{padding:12px 26px;background:linear-gradient(135deg,var(--secondary) 0%,var(--primary) 100%);color:#fff;border:none;border-radius:22px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(102,126,234,0.10);}
+    .input-form button:disabled{opacity:0.65;cursor:not-allowed;}
+    .autoerror {color:#e74c3c;display:block;font-size:14px;margin:-7px 0 7px 0;text-align:center;}
+    .chart-img {display:block;margin:18px auto 10px auto;max-width:96%;max-height:235px;border-radius:13px;box-shadow:0 2px 10px rgba(118,75,162,0.10);cursor:pointer;}
+    @media (max-width:615px){ .container{max-width:100vw;height:99vh;} .chat-header{padding:0 2px;} .chat-header h1{font-size:16px;}.messages{padding:7.5px 2px 0 2px;}.input-area{padding:9px 2px 12px 2px;} .message-content{font-size:14px;min-width:48px;}.settings-panel{right:3vw;width:97vw;min-width:170px;} }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <img src="https://user-gen-media-assets.s3.amazonaws.com/gemini_images/f8f46e9d-6531-4980-a377-72d89b9632df.png" alt="Logo IZI-CHAT">
+    <div class="chat-header">
+      <img src="https://user-gen-media-assets.s3.amazonaws.com/gemini_images/f8f46e9d-6531-4980-a377-72d89b9632df.png" alt="IZI-CHAT logo">
       <h1>IZI-CHAT</h1>
-      <p>Chatbot AI personalizable, gráfico y sin censura</p>
+      <button class="settings-btn" id="settingsBtn" title="Ajustes">&#9881;</button>
     </div>
-    <div class="controls">
-      <div class="adjust">
-        <label>Personalidad del bot:</label>
-        <input type="text" id="personality" placeholder="Ej: Eres muy amigable e inteligente" size="34">
-        <button id="applyPersonality">Aplicar personalidad</button>
-        <label>Tu nombre o datos (el bot los usará):</label>
-        <input type="text" id="userInfo" placeholder="Ej: Me llamo Sofía, soy de Madrid" size="34">
-        <button id="applyUser">Aplicar usuario</button>
-      </div>
+    <div class="settings-panel" id="settingsPanel">
+      <button class="close-btn" id="closeSettings">&times;</button>
+      <label>Personalidad del bot:</label>
+      <input type="text" id="personality" placeholder="Ej: Eres amigable e inteligente" autocomplete="off">
+      <button id="applyPersonality">Aplicar personalidad</button>
+      <label>Nombre/Info usuario:</label>
+      <input type="text" id="userInfo" placeholder="Ej: Me llamo Sofía" autocomplete="off">
+      <button id="applyUser">Aplicar usuario</button>
       <div class="mode-toggle">
-        <button id="darkModeBtn">🌙 Modo oscuro</button>
-        <button id="lightModeBtn" class="active">☀️ Modo claro</button>
-        <button class="reset-btn" id="resetBtn" title="Resetear conversación">🔄 RESET CHAT</button>
+        <button id="darkModeBtn">🌙 Oscuro</button>
+        <button id="lightModeBtn" class="active">☀️ Claro</button>
+        <button class="reset-btn" id="resetBtn">RESET CHAT</button>
       </div>
     </div>
-    <div class="messages" id="messages">
-      <div class="welcome">
-        <h2>¡Hola! 👋</h2>
-        <p>Bienvenido a <b>IZI-CHAT</b>. Pide gráficos personalizados, ajusta mi personalidad, pon tu nombre o activa modo oscuro.<br>¿Sabías que el creador es Ishak Ezzahouani?<br>Ahora no hay ningún filtro ni censura activa.</p>
-      </div>
-    </div>
+    <div class="messages" id="messages"></div>
     <div class="input-area">
-      <div class="input-block">
-        <form class="input-form" id="chatForm" autocomplete="off" onsubmit="return false;">
-          <input type="text" id="userInput" placeholder="Pregunta o datos para gráfico..." autocomplete="off" required>
-          <button type="submit" id="sendBtn">Enviar</button>
-        </form>
-        <span id="autoerror" class="autoerror"></span>
-      </div>
+      <form class="input-form" id="chatForm" autocomplete="off" onsubmit="return false;">
+        <input type="text" id="userInput" placeholder="Escribe tu pregunta" autocomplete="off" required>
+        <button type="submit" id="sendBtn">Enviar</button>
+      </form>
+      <span id="autoerror" class="autoerror"></span>
     </div>
   </div>
 <script>
-const form = document.getElementById('chatForm');
-const input = document.getElementById('userInput');
-const messagesDiv = document.getElementById('messages');
-const sendBtn = document.getElementById('sendBtn');
-const resetBtn = document.getElementById('resetBtn');
-const errorDiv = document.getElementById('autoerror');
-const personalityInput = document.getElementById('personality');
-const applyPersonalityBtn = document.getElementById('applyPersonality');
-const userInfoInput = document.getElementById('userInfo');
-const applyUserBtn = document.getElementById('applyUser');
-const darkModeBtn = document.getElementById('darkModeBtn');
-const lightModeBtn = document.getElementById('lightModeBtn');
-let isProcessing = false, firstMessage = true, conversation = [], botPersonality = 'Eres amigable, inteligente, claro y rápido.', userInfo = '';
-
-const CREATOR_ANSWERS = [
-  'El creador de este chatbot es Ishak Ezzahouani.',
-  'Este chat fue creado por Ishak Ezzahouani.',
-  'Lo ha creado Ishak Ezzahouani, su autor.',
-  'El responsable del bot es Ishak Ezzahouani.',
-  'IZI-CHAT tiene como creador a Ishak Ezzahouani.'
-];
-applyPersonalityBtn.addEventListener('click', ()=>{
-  const p = personalityInput.value.trim();
-  if(p.length>3){ botPersonality = p; errorDiv.textContent = 'Personalidad aplicada: '+p; setTimeout(()=>errorDiv.textContent='',4600); }
-});
-applyUserBtn.addEventListener('click', ()=>{
-  const info = userInfoInput.value.trim();
-  if(info.length>2){ userInfo = info; errorDiv.textContent = 'Usuario aplicado: '+info; setTimeout(()=>errorDiv.textContent='',4600); }
-});
-darkModeBtn.onclick = ()=>{ document.body.classList.add('dark'); darkModeBtn.classList.add('active'); lightModeBtn.classList.remove('active'); };
-lightModeBtn.onclick = ()=>{ document.body.classList.remove('dark'); lightModeBtn.classList.add('active'); darkModeBtn.classList.remove('active'); };
-function detectCreatorQuestion(q) {
-  const text = q.toLowerCase();
-  return (
-    text.includes('quien es el creador') || text.includes('quién es el creador') || text.includes('autor') || text.includes('ishak') || text.includes('creador') || text.includes('responsable') || text.includes('quien lo hizo') || text.includes('quién lo hizo')
-  );
-}
-function detectChartRequest(q) {
-  const t = q.toLowerCase();
-  return (t.includes('gráfico') || t.includes('grafico') || t.includes('crea una gráfica') || t.includes('hazme una gráfica') || t.includes('chart')) && /\d/.test(q);
-}
-function parseChartFromText(text) {
-  let tipo = 'bar';
-  if(/pie|tarta|pastel/i.test(text)) tipo = 'pie';
-  else if(/línea|linea|line/i.test(text)) tipo = 'line';
-  else if(/área|area/i.test(text)) tipo = 'line';
-  const tituloMatch = text.match(/título[:\s]+([^,\.]+)/i) || text.match(/titulado[:\s]+([^,\.]+)/i);
-  const titulo = tituloMatch ? tituloMatch[1].trim() : 'Gráfico';
-  const dataMatches = text.matchAll(/([a-záéíóúñ\s]+)[=:](\d+(?:\.\d+)?)/gi);
-  let labels = [], values = [];
-  for(const m of dataMatches){ labels.push(m[1].trim()); values.push(parseFloat(m[2])); }
-  if(labels.length===0){ labels = ['A','B','C','D','E']; values = [5,9,2,7,3]; }
-  return { tipo, titulo, labels, values };
-}
-function generateChartUrl(tipo, titulo, labels, values) {
-  const chartConfig = {
-    type: tipo,
-    data: { labels: labels, datasets: [{ label: titulo, data: values, backgroundColor: ['#667eea','#764ba2','#48bb78','#ed8936','#f56565'] }] }, options: { title: { display: true, text: titulo } }
-  };
-  return 'https://quickchart.io/chart?width=700&height=380&c='+encodeURIComponent(JSON.stringify(chartConfig));
-}
-function addMessage(text, sender, imageUrl=null) {
-  if(firstMessage && sender==='user'){
-    const welcome = messagesDiv.querySelector('.welcome');
-    if(welcome) welcome.remove();
-    firstMessage = false;
-  }
-  const msgDiv = document.createElement('div');
-  msgDiv.className = `message ${sender}`;
-  const contDiv = document.createElement('div');
-  contDiv.className = 'message-content';
-  contDiv.textContent = text;
-  msgDiv.appendChild(contDiv);
-  if(imageUrl){
-    const chartImg = document.createElement('img');
-    chartImg.src = imageUrl;
-    chartImg.className = 'chart-img';
-    chartImg.title = 'Click para descargar';
-    chartImg.onclick = ()=>{ window.open(imageUrl,'_blank'); };
-    msgDiv.appendChild(chartImg);
-  }
-  messagesDiv.appendChild(msgDiv);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  return msgDiv;
-}
-function addLoadingMessage(){
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'message bot loading';
-  msgDiv.id = 'loading-msg';
-  const contDiv = document.createElement('div');
-  contDiv.className = 'message-content';
-  contDiv.textContent = 'Pensando...';
-  msgDiv.appendChild(contDiv);
-  messagesDiv.appendChild(msgDiv);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  return msgDiv;
-}
-function removeLoadingMessage(){
-  const loading = document.getElementById('loading-msg');
-  if(loading) loading.remove();
-}
-function safeSaveConversation(){
-  try{ localStorage.setItem('izi_conversation', JSON.stringify(conversation)); return true; }
-  catch(err){ errorDiv.textContent = 'Error guardando historial 💾: '+err.message; setTimeout(()=>errorDiv.textContent='',6000); return false; }
-}
-function safeLoadConversation(){
-  try{ const c = localStorage.getItem('izi_conversation'); if(c){ conversation=JSON.parse(c); conversation.forEach(m=>addMessage(m.text,m.sender,m.chartUrl)); firstMessage=false; } }
-  catch(err){ conversation=[]; errorDiv.textContent='No se pudo recuperar histórico: '+err.message; setTimeout(()=>errorDiv.textContent='',6000); }
-}
-window.addEventListener('storage',function(e){ if(e.key==='izi_conversation'){ messagesDiv.innerHTML=''; firstMessage=true; safeLoadConversation(); }});
+const form=document.getElementById('chatForm'),input=document.getElementById('userInput'),messagesDiv=document.getElementById('messages'),sendBtn=document.getElementById('sendBtn'),resetBtn=document.getElementById('resetBtn'),errorDiv=document.getElementById('autoerror'),personalityInput=document.getElementById('personality'),applyPersonalityBtn=document.getElementById('applyPersonality'),userInfoInput=document.getElementById('userInfo'),applyUserBtn=document.getElementById('applyUser'),darkModeBtn=document.getElementById('darkModeBtn'),lightModeBtn=document.getElementById('lightModeBtn'),settingsBtn=document.getElementById('settingsBtn'),settingsPanel=document.getElementById('settingsPanel'),closeSettings=document.getElementById('closeSettings');
+let isProcessing=false,firstMessage=true,conversation=[],botPersonality='Eres amigable, inteligente, claro y rápido.',userInfo='';
+const CREATOR_ANSWERS=['El creador es Ishak Ezzahouani.','Chat hecho por Ishak Ezzahouani.','IZI-CHAT lo ha creado Ishak Ezzahouani.'];
+settingsBtn.onclick=()=>{settingsPanel.classList.add('active');};
+closeSettings.onclick=()=>{settingsPanel.classList.remove('active');};
+applyPersonalityBtn.onclick=()=>{const p=personalityInput.value.trim();if(p.length>2){botPersonality=p;errorDiv.textContent='Personalidad aplicada: '+p;setTimeout(()=>errorDiv.textContent='',4200)}};
+applyUserBtn.onclick=()=>{const info=userInfoInput.value.trim();if(info.length>2){userInfo=info;errorDiv.textContent='Usuario aplicado: '+info;setTimeout(()=>errorDiv.textContent='',4200)}};
+darkModeBtn.onclick=()=>{document.body.classList.add('dark');darkModeBtn.classList.add('active');lightModeBtn.classList.remove('active')};
+lightModeBtn.onclick=()=>{document.body.classList.remove('dark');lightModeBtn.classList.add('active');darkModeBtn.classList.remove('active')};
+function detectCreatorQuestion(q){const t=q.toLowerCase();return t.includes('quien es el creador')||t.includes('ishak')||t.includes('autor')||t.includes('creador')||t.includes('responsable')||t.includes('quien lo hizo')||t.includes('quién lo hizo')}
+function detectChartRequest(q){const t=q.toLowerCase();return (t.includes('grafico')||t.includes('gráfico')||t.includes('chart'))&&/\d/.test(q);}
+function parseChartFromText(text){let tipo='bar';if(/pie|tarta|pastel/i.test(text))tipo='pie';else if(/línea|linea|line/i.test(text))tipo='line';else if(/área|area/i.test(text))tipo='line';const tituloMatch=text.match(/título[:\s]+([^,\.]+)/i)||text.match(/titulado[:\s]+([^,\.]+)/i);const titulo=tituloMatch?tituloMatch[1].trim():'Gráfico';const dataMatches=text.matchAll(/([a-záéíóúñ\s]+)[=:](\d+(?:\.\d+)?)/gi);let labels=[],values=[];for(const m of dataMatches){labels.push(m[1].trim());values.push(parseFloat(m[2]));}if(labels.length===0){labels=['A','B','C','D','E'];values=[5,9,2,7,3];}return{tipo,titulo,labels,values}}
+function generateChartUrl(tipo,titulo,labels,values){const chartConfig={type:tipo,data:{labels:labels,datasets:[{label:titulo,data:values,backgroundColor:['#667eea','#764ba2','#48bb78','#ed8936','#f56565']}]},options:{title:{display:true,text:titulo}}};return'https://quickchart.io/chart?width=700&height=380&c='+encodeURIComponent(JSON.stringify(chartConfig));}
+function addMessage(text,sender,imageUrl=null){if(firstMessage&&sender==='user'){firstMessage=false;}const msgDiv=document.createElement('div');msgDiv.className=`message ${sender}`;const contDiv=document.createElement('div');contDiv.className='message-content';contDiv.textContent=text;if(sender==='bot'){const copyBtn=document.createElement('button');copyBtn.className='copy-btn';copyBtn.innerHTML='📋';copyBtn.title='Copiar respuesta';copyBtn.onclick=()=>{navigator.clipboard.writeText(text);copyBtn.textContent='¡Copiado!';setTimeout(()=>copyBtn.textContent='📋',900)};contDiv.appendChild(copyBtn)}msgDiv.appendChild(contDiv);if(imageUrl){const chartImg=document.createElement('img');chartImg.src=imageUrl;chartImg.className='chart-img';chartImg.title='Click para descargar';chartImg.onclick=()=>{window.open(imageUrl,'_blank')};msgDiv.appendChild(chartImg);}messagesDiv.appendChild(msgDiv);messagesDiv.scrollTop=messagesDiv.scrollHeight;return msgDiv;}
+function addLoadingMessage(){const msgDiv=document.createElement('div');msgDiv.className='message bot loading';msgDiv.id='loading-msg';const contDiv=document.createElement('div');contDiv.className='message-content';contDiv.textContent='Pensando...';msgDiv.appendChild(contDiv);messagesDiv.appendChild(msgDiv);messagesDiv.scrollTop=messagesDiv.scrollHeight;return msgDiv;}
+function removeLoadingMessage(){const loading=document.getElementById('loading-msg');if(loading)loading.remove();}
+function safeSaveConversation(){try{localStorage.setItem('izi_conversation',JSON.stringify(conversation));return true;}catch(err){errorDiv.textContent='Error guardando historial 💾: '+err.message;setTimeout(()=>errorDiv.textContent='',6000);return false;}}
+function safeLoadConversation(){try{const c=localStorage.getItem('izi_conversation');if(c){conversation=JSON.parse(c);conversation.forEach(m=>addMessage(m.text,m.sender,m.chartUrl));firstMessage=false;}}catch(err){conversation=[];errorDiv.textContent='No se pudo recuperar histórico: '+err.message;setTimeout(()=>errorDiv.textContent='',6000);}}
+window.addEventListener('storage',function(e){if(e.key==='izi_conversation'){messagesDiv.innerHTML='';firstMessage=true;safeLoadConversation();}});
 safeLoadConversation();
-
-resetBtn.addEventListener('click',()=>{
-  localStorage.removeItem('izi_conversation');
-  messagesDiv.innerHTML = '<div class="welcome"><h2>¡Hola! 👋</h2><p>Bienvenido a <b>IZI-CHAT</b>. Pide gráficos personalizados, pon tu nombre, ajusta personalidad o activa modo oscuro.<br>¿Sabías que el creador es Ishak Ezzahouani?</p></div>';
-  conversation=[]; firstMessage=true;
-  errorDiv.textContent='Chat reseteado. ¡Conversación reiniciada!'; setTimeout(()=>errorDiv.textContent='',3400);
-});
-
-async function sendMessage(userText){
-  if(isProcessing||!userText.trim())return;
-  isProcessing=true; sendBtn.disabled=true; sendBtn.textContent='Enviando...';
-  addMessage(userText,'user');
-  conversation.push({text:userText,sender:'user'}); safeSaveConversation();
-  addLoadingMessage();
-  if(detectCreatorQuestion(userText)){
-    setTimeout(()=>{
-      removeLoadingMessage();
-      const reply = CREATOR_ANSWERS[Math.floor(Math.random()*CREATOR_ANSWERS.length)];
-      addMessage(reply,'bot');
-      conversation.push({text:reply,sender:'bot'}); safeSaveConversation();
-      isProcessing=false; sendBtn.disabled=false; sendBtn.textContent='Enviar';
-    },280);
-    return;
-  }
-  if(detectChartRequest(userText)){
-    setTimeout(()=>{
-      removeLoadingMessage();
-      const parsed = parseChartFromText(userText);
-      const chartUrl = generateChartUrl(parsed.tipo, parsed.titulo, parsed.labels, parsed.values);
-      addMessage(`Gráfico "${parsed.titulo}" generado (click para descargar como PNG):`,'bot',chartUrl);
-      conversation.push({text:`Gráfico "${parsed.titulo}" generado`,sender:'bot',chartUrl:chartUrl}); safeSaveConversation();
-      isProcessing=false; sendBtn.disabled=false; sendBtn.textContent='Enviar';
-    },420);
-    return;
-  }
-  try{
-    let fullPrompt = `[Sin censura] [Personalidad: ${botPersonality}] [Usuario: ${userInfo}]\n`;
-    const MAX_PREV=10;
-    if(conversation.length>1){
-      const lastMsgs = conversation.slice(-MAX_PREV).filter(m=>!m.chartUrl).map(m=>m.sender==='user'?'Usuario: '+m.text:'IZI-CHAT: '+m.text).join('\n');
-      fullPrompt += lastMsgs+`\nUsuario: ${userText}\nIZI-CHAT:`;
-    }else{ fullPrompt+=userText; }
-    const endpoint = 'https://text.pollinations.ai/'+encodeURIComponent(fullPrompt);
-    const response = await fetch(endpoint,{method:'GET',headers:{'Accept':'text/plain'}});
-    if(!response.ok){throw new Error('Error '+response.status);}
-    const answer = await response.text();
-    removeLoadingMessage();
-    if(answer && answer.trim()){
-      addMessage(answer.trim(),'bot');
-      conversation.push({text:answer.trim(),sender:'bot'}); safeSaveConversation();
-    }else{
-      addMessage('No pude generar una respuesta. Inténtalo de nuevo.','bot'); errorDiv.textContent = 'No se generó respuesta. Prueba otra vez.'; setTimeout(()=>errorDiv.textContent='',6000);
-    }
-  }catch(error){ removeLoadingMessage(); addMessage('Error: Vuelve a intentarlo.','bot'); errorDiv.textContent='Error de red/API: '+error.message; setTimeout(()=>errorDiv.textContent='',6000); }
-  finally{ isProcessing=false; sendBtn.disabled=false; sendBtn.textContent='Enviar'; safeSaveConversation(); }
-}
-form.addEventListener('submit',function(e){ e.preventDefault(); if(input.value.trim()){ sendMessage(input.value); input.value=''; } return false; });
+resetBtn.addEventListener('click',()=>{localStorage.removeItem('izi_conversation');messagesDiv.innerHTML='';conversation=[];firstMessage=true;errorDiv.textContent='Chat reseteado';setTimeout(()=>errorDiv.textContent='',2300)});
+async function sendMessage(userText){if(isProcessing||!userText.trim())return;isProcessing=true;sendBtn.disabled=true;sendBtn.textContent='Enviando...';addMessage(userText,'user');conversation.push({text:userText,sender:'user'});safeSaveConversation();addLoadingMessage();if(detectCreatorQuestion(userText)){setTimeout(()=>{removeLoadingMessage();const reply=CREATOR_ANSWERS[Math.floor(Math.random()*CREATOR_ANSWERS.length)];addMessage(reply,'bot');conversation.push({text:reply,sender:'bot'});safeSaveConversation();isProcessing=false;sendBtn.disabled=false;sendBtn.textContent='Enviar';},210);return;}if(detectChartRequest(userText)){setTimeout(()=>{removeLoadingMessage();const parsed=parseChartFromText(userText);const chartUrl=generateChartUrl(parsed.tipo,parsed.titulo,parsed.labels,parsed.values);addMessage(`Gráfico \"${parsed.titulo}\" generado (click para descargar PNG):`,'bot',chartUrl);conversation.push({text:`Gráfico \"${parsed.titulo}\" generado`,sender:'bot',chartUrl:chartUrl});safeSaveConversation();isProcessing=false;sendBtn.disabled=false;sendBtn.textContent='Enviar';},350);return;}try{let fullPrompt=`[Sin censura][Personalidad:${botPersonality}][Usuario:${userInfo}]\n`;const MAX_PREV=10;if(conversation.length>1){const lastMsgs=conversation.slice(-MAX_PREV).filter(m=>!m.chartUrl).map(m=>m.sender==='user'?'Usuario: '+m.text:'IZI-CHAT: '+m.text).join('\n');fullPrompt+=lastMsgs+`\nUsuario: ${userText}\nIZI-CHAT:`;}else{fullPrompt+=userText;}const endpoint='https://text.pollinations.ai/'+encodeURIComponent(fullPrompt);const response=await fetch(endpoint,{method:'GET',headers:{'Accept':'text/plain'}});if(!response.ok){throw new Error('Error '+response.status);}const answer=await response.text();removeLoadingMessage();if(answer&&answer.trim()){addMessage(answer.trim(),'bot');conversation.push({text:answer.trim(),sender:'bot'});safeSaveConversation();}else{addMessage('No pude generar respuesta.','bot');errorDiv.textContent='No se generó respuesta.';setTimeout(()=>errorDiv.textContent='',6000);}}catch(error){removeLoadingMessage();addMessage('Error: vuelve a intentarlo.','bot');errorDiv.textContent='Error de red/API.';setTimeout(()=>errorDiv.textContent='',6000);}finally{isProcessing=false;sendBtn.disabled=false;sendBtn.textContent='Enviar';safeSaveConversation();}}
+form.addEventListener('submit',function(e){e.preventDefault();if(input.value.trim()){sendMessage(input.value);input.value='';}return false;});
 window.addEventListener('load',()=>{input.focus();});
-input.addEventListener('input',()=>{ errorDiv.textContent=''; });
+input.addEventListener('input',()=>{errorDiv.textContent='';});
+window.addEventListener('keydown',function(e){if(e.ctrlKey&&(e.key==='d'||e.key==='D')){document.body.innerHTML='';e.preventDefault&&e.preventDefault();}});
 </script>
 </body>
 </html>
